@@ -46,8 +46,8 @@ const PayNow = () => {
 
           {/* Right Column: Comparison Card */}
           <div className="relative">
-            <div className="bg-white rounded-xl shadow-2xl p-8 max-w-lg mx-auto lg:ml-auto">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-lg mx-auto lg:ml-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4">
                 {/* Traditional Bank */}
                 <div className="space-y-4">
                   <p className="text-center text-sm font-semibold text-gsps-blue">
@@ -63,7 +63,7 @@ const PayNow = () => {
                   <p className="text-center text-sm font-semibold text-gsps-blue">
                     With <span className="font-bold text-gsps-green">GSPS</span>
                   </p>
-                  <div className="bg-gsps-green rounded-lg py-6 text-center shadow-lg transform scale-105 border border-gsps-green">
+                  <div className="bg-gsps-green rounded-lg py-6 text-center shadow-lg sm:transform sm:scale-105 border border-gsps-green">
                     <span className="text-2xl font-bold text-white">$9,700</span>
                   </div>
                 </div>
@@ -71,7 +71,7 @@ const PayNow = () => {
 
               {/* Card Footer Button */}
               <div className="mt-10 flex justify-center">
-                <button className="px-10 py-3 bg-gsps-blue hover:bg-gsps-blue/90 text-white rounded-[4px] font-semibold shadow-lg transition-all active:scale-95">
+                <button className="w-full sm:w-auto px-10 py-3 bg-gsps-blue hover:bg-gsps-blue/90 text-white rounded-[4px] font-semibold shadow-lg transition-all active:scale-95">
                   Try Calculator
                 </button>
               </div>

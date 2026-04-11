@@ -10,10 +10,10 @@ const CTASection = () => {
             Save money. Pay smarter. Study anywhere.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <button className="px-10 py-4 bg-gsps-green hover:bg-gsps-green/90 text-white rounded-[4px] font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95">
+            <button className="text-[16px] px-15 py-3 bg-gsps-green hover:bg-gsps-green/90 text-white rounded-[4px] font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95">
               Sign Up Free
             </button>
-            <button className="px-10 py-4 bg-gsps-blue hover:bg-gsps-blue/90 text-white rounded-[4px] font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95">
+            <button className="text-[16px] px-15 py-3 bg-gsps-blue hover:bg-gsps-blue/90 text-white rounded-[4px] font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95">
               Pay Tuition Now
             </button>
           </div>

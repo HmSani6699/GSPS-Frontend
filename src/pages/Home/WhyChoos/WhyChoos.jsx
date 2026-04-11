@@ -25,22 +25,22 @@ const WhyChoos = () => {
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gsps-blue text-center mb-8">
+        <h2 className="text-2xl md:text-4xl font-bold text-gsps-blue mb-8">
           Why Choose GSPS?
         </h2>
 
-        <div className="border-t border-gray-200 pt-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
+        <div className="border-t border-gray-100 pt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 sm:gap-10 lg:gap-0">
             {features.map((feature, index) => (
               <div
                 key={index}
                 className={`flex items-center space-x-4 lg:px-6 ${
                   index !== features.length - 1
-                    ? "lg:border-r lg:border-gray-200"
+                    ? "lg:border-r lg:border-gray-100"
                     : ""
                 }`}
               >
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 p-2 bg-gsps-bg-light/30 rounded-lg">
                   <img
                     src={feature.icon}
                     alt={feature.title}
@@ -48,7 +48,7 @@ const WhyChoos = () => {
                   />
                 </div>
                 <div>
-                  <h3 className="text-[17px] font-bold text-gsps-blue leading-tight">
+                  <h3 className="text-lg font-bold text-gsps-blue leading-tight">
                     {feature.title}
                   </h3>
                   <p className="text-sm text-gray-500 mt-1">
