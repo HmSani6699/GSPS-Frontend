@@ -6,6 +6,7 @@ import Home from "../pages/Home/Home.jsx";
 import Login from "../pages/Auth/Login.jsx";
 import Signup from "../pages/Auth/Signup.jsx";
 import Support from "../pages/Support/Support.jsx";
+import Calculator from "../pages/Calculator/Calculator.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "support",
         element: <Support />,
+      },
+      {
+        path: "calculator",
+        element: <Calculator />,
       },
     ],
   },
