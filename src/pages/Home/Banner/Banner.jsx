@@ -16,7 +16,7 @@ const Banner = () => {
         <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
           {/* Left Column: Content */}
           <div className="text-center lg:text-left lg:col-span-6">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[45px] tracking-tight font-extrabold text-gsps-blue leading-[1.2] lg:leading-[1.4]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[43px] tracking-tight font-extrabold text-gsps-blue leading-[1.8] lg:leading-[1.4]">
               Pay Your Tuition Globally — <br className="hidden lg:block" />
               Save More as a Student
             </h1>

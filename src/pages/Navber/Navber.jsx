@@ -35,11 +35,12 @@ const Navber = () => {
                 {link.name}
               </Link>
             ))}
+           
             <Link
-              to="/signup"
+             to="/login"
               className="bg-gsps-green text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-gsps-green/90 transition-all shadow-md active:scale-95"
             >
-              Sign Up
+              Login
             </Link>
           </div>
 
@@ -94,6 +95,13 @@ const Navber = () => {
               {link.name}
             </Link>
           ))}
+          <Link
+            to="/login"
+            onClick={() => setIsOpen(false)}
+            className="text-gsps-blue font-medium text-lg hover:text-gsps-green transition-colors w-full text-center py-2"
+          >
+            Login
+          </Link>
           <Link
             to="/signup"
             onClick={() => setIsOpen(false)}
