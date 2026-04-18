@@ -4,11 +4,11 @@ import api from '../../services/api';
 import { useChat } from '../../context/ChatContext';
 
 const ChatWindow = ({ user, room, receiverId, onClose }) => {
-    const { markAsRead, onlineUsers } = useChat();
+    const { markAsRead, onlineUsers, playNotificationSound } = useChat();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const messagesEndRef = useRef(null);
-    const [audio] = useState(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'));
+
 
 
     const scrollToBottom = () => {
@@ -43,7 +43,7 @@ const ChatWindow = ({ user, room, receiverId, onClose }) => {
                 // If message is from someone else, play sound and mark as read
                 const senderId = typeof message.sender === 'object' ? message.sender._id : message.sender;
                 if (senderId !== user._id) {
-                    audio.play().catch(e => console.log('Audio play failed:', e));
+                    playNotificationSound();
                     markAsRead(room);
                 }
             }
@@ -67,7 +67,8 @@ const ChatWindow = ({ user, room, receiverId, onClose }) => {
             socket.off('messages_read', handleMessagesRead);
             socket.emit('leave_room', room);
         };
-    }, [room, markAsRead, user._id, audio]);
+    }, [room, markAsRead, user._id, playNotificationSound]);
+
 
 
 

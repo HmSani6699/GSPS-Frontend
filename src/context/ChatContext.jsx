@@ -7,11 +7,31 @@ const ChatContext = createContext();
 
 export const useChat = () => useContext(ChatContext);
 
+// import soun from '../../public/sounds/notification.mp3'
+
 export const ChatProvider = ({ children }) => {
     const { user } = useAuth();
     const [totalUnread, setTotalUnread] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(new Set());
-    const [notificationAudio] = useState(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'));
+    const [lastNotificationTime, setLastNotificationTime] = useState(0);
+    
+    // Modern, soft notification sound
+    // const [notificationAudio] = useState(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'));
+    const [notificationAudio] = useState(new Audio('../../public/sounds/sound.mp3'));
+
+    useEffect(() => {
+        notificationAudio.volume = 0.4; // Set volume to 40% (pleasant and soft)
+    }, [notificationAudio]);
+
+    const playNotificationSound = useCallback(() => {
+        const now = Date.now();
+        // Prevent spam: only play if at least 1 second has passed since the last sound
+        if (now - lastNotificationTime > 1000) {
+            notificationAudio.currentTime = 0; // Reset to beginning for crisp playback
+            notificationAudio.play().catch(e => console.log('Audio play failed:', e));
+            setLastNotificationTime(now);
+        }
+    }, [notificationAudio, lastNotificationTime]);
 
     const fetchUnreadCount = useCallback(async () => {
         if (!user) return;
@@ -34,12 +54,10 @@ export const ChatProvider = ({ children }) => {
         }
 
         const handleNotification = (message) => {
-            // Play sound
-            notificationAudio.play().catch(e => console.log('Audio play failed:', e));
-            
-            // Increment unread count
+            playNotificationSound();
             setTotalUnread(prev => prev + 1);
         };
+
 
         const handleOnlineStatus = ({ userId, status }) => {
             setOnlineUsers(prev => {
@@ -70,8 +88,9 @@ export const ChatProvider = ({ children }) => {
     };
 
     return (
-        <ChatContext.Provider value={{ totalUnread, onlineUsers, markAsRead, fetchUnreadCount }}>
+        <ChatContext.Provider value={{ totalUnread, onlineUsers, markAsRead, fetchUnreadCount, playNotificationSound }}>
             {children}
         </ChatContext.Provider>
     );
 };
+

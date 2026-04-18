@@ -5,6 +5,8 @@ const PaymentManagement = () => {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedPayment, setSelectedPayment] = useState(null);
+    const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
     const [editData, setEditData] = useState({
         status: '',
         savingsAmount: '',
@@ -12,8 +14,9 @@ const PaymentManagement = () => {
     });
 
     const fetchPayments = async () => {
+        setLoading(true);
         try {
-            const res = await api.get('/admin/payments');
+            const res = await api.get(`/admin/payments?search=${search}&status=${statusFilter}`);
             setPayments(res.data);
         } catch (err) {
             console.error(err);
@@ -23,8 +26,10 @@ const PaymentManagement = () => {
     };
 
     useEffect(() => {
-        fetchPayments();
-    }, []);
+        const debounceFetch = setTimeout(fetchPayments, 300);
+        return () => clearTimeout(debounceFetch);
+    }, [search, statusFilter]);
+
 
     const openDetails = (payment) => {
         setSelectedPayment(payment);
@@ -48,19 +53,47 @@ const PaymentManagement = () => {
     return (
         <div className="space-y-12">
             <header>
-                <h1 className="text-4xl font-black text-gsps-blue mb-2">Global <span className="text-gsps-green">Payments</span></h1>
+                <h1 className="text-[23px] lg:text-4xl font-black text-gsps-blue mb-2">Global <span className="text-gsps-green">Payments</span></h1>
                 <p className="text-gsps-blue/40 font-bold uppercase tracking-widest text-sm">Process Tuition & Visa Transactions</p>
             </header>
 
-            <div className="bg-white rounded-[40px] shadow-sm border border-gray-100 overflow-hidden">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="relative w-full md:w-96">
+                    <input 
+                        type="text" 
+                        placeholder="Search by name, email or txn ID..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 rounded-[10px] border border-gray-100 focus:border-gsps-blue outline-none font-bold text-sm shadow-sm transition-all"
+                    />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl">🔍</span>
+                </div>
+                
+                <div className="w-full md:w-auto">
+                    <select 
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="w-full md:w-48 px-4 py-4 rounded-[10px] border border-gray-100 font-bold text-sm outline-none bg-white shadow-sm"
+                    >
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div className="bg-white rounded-[10px] shadow-sm border border-gray-100 overflow-y-auto">
                 <table className="w-full text-left">
-                    <thead className="bg-gsps-bg-light border-b border-gray-100">
-                        <tr>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Student</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Type</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Amount</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Status</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest text-right">Action</th>
+                    <thead className="bg-[#003b73] border-b border-gray-100">
+                        <tr className='whitespace-nowrap'>
+                            <th className="px-8 py-6 text-xs font-black text-white  tracking-widest">Student</th>
+                            <th className="px-8 py-6 text-xs font-black text-white  tracking-widest">Type</th>
+                            <th className="px-8 py-6 text-xs font-black text-white  tracking-widest">Amount</th>
+                            <th className="px-8 py-6 text-xs font-black text-white  tracking-widest">Status</th>
+                            <th className="px-8 py-6 text-xs font-black text-white  tracking-widest text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">

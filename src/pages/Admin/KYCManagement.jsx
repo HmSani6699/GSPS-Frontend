@@ -6,10 +6,13 @@ const KYCManagement = () => {
     const [loading, setLoading] = useState(true);
     const [selectedKYC, setSelectedKYC] = useState(null);
     const [rejectionReason, setRejectionReason] = useState('');
+    const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
 
     const fetchKYCs = async () => {
+        setLoading(true);
         try {
-            const res = await api.get('/admin/kyc');
+            const res = await api.get(`/admin/kyc?search=${search}&status=${statusFilter}`);
             setKycs(res.data);
         } catch (err) {
             console.error(err);
@@ -19,8 +22,10 @@ const KYCManagement = () => {
     };
 
     useEffect(() => {
-        fetchKYCs();
-    }, []);
+        const debounceFetch = setTimeout(fetchKYCs, 300);
+        return () => clearTimeout(debounceFetch);
+    }, [search, statusFilter]);
+
 
     const handleUpdateStatus = async (id, status) => {
         if (status === 'rejected' && !rejectionReason.trim()) {
@@ -44,15 +49,42 @@ const KYCManagement = () => {
                 <p className="text-gsps-blue/40 font-bold uppercase tracking-widest text-sm">Review Student Identites</p>
             </header>
 
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="relative w-full md:w-96">
+                    <input 
+                        type="text" 
+                        placeholder="Search by name or email..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 rounded-[10px] border border-gray-100 focus:border-gsps-blue outline-none font-bold text-sm shadow-sm transition-all"
+                    />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl">🔍</span>
+                </div>
+                
+                <div className="w-full md:w-auto">
+                    <select 
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="w-full md:w-48 px-4 py-4 rounded-[10px] border border-gray-100 font-bold text-sm outline-none bg-white shadow-sm"
+                    >
+                        <option value="">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+
             <div className="bg-white rounded-[10px] shadow-sm border border-gray-100 overflow-y-auto">
                 <table className="w-full text-left">
-                    <thead className="bg-gsps-bg-light border-b border-gray-100">
-                        <tr>
-                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Student</th>
-                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Document</th>
-                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Submitted</th>
-                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Status</th>
-                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest text-right">Action</th>
+                    <thead className="bg-[#003b73] border-b border-gray-100">
+                        <tr className='whitespace-nowrap'>
+                            <th className="px-8 py-5 text-xs font-black text-white  tracking-widest">Student</th>
+                            <th className="px-8 py-5 text-xs font-black text-white  tracking-widest">Document</th>
+                            <th className="px-8 py-5 text-xs font-black text-white  tracking-widest">Submitted</th>
+                            <th className="px-8 py-5 text-xs font-black text-white  tracking-widest">Status</th>
+                            <th className="px-8 py-5 text-xs font-black text-white  tracking-widest text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
