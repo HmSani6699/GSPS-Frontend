@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ChatFloatingButton from '../components/Chat/ChatFloatingButton';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
@@ -20,6 +21,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: 'Payments list', path: '/admin/payments', icon: '💳' },
         { name: 'User Management', path: '/admin/users', icon: '👥' },
         { name: 'Analytics', path: '/admin/analytics', icon: '📈' },
+        { name: 'Live Chat', path: '/admin/chat', icon: '💬' },
     ];
 
     const actualItems = user?.role === 'admin' ? adminItems : menuItems;
@@ -39,7 +41,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         <Link
                             key={item.name}
                             to={item.path}
-                            className={`flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all ${
+                            className={`flex items-center space-x-4 px-6 py-4 rounded-[10px] transition-all ${
                                 location.pathname === item.path ? 'bg-gsps-green text-white shadow-lg' : 'hover:bg-white/5 text-white/60 hover:text-white'
                             }`}
                         >
@@ -49,10 +51,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     ))}
                 </nav>
 
-                <div className="p-6 mt-auto border-t border-white/5">
+                <div className=" mt-auto border-t border-white/5">
                     <button 
                         onClick={() => { logout(); navigate('/login'); }}
-                        className="flex items-center space-x-4 px-6 py-4 w-full text-left text-white/40 hover:text-red-400 hover:bg-red-400/5 rounded-2xl transition-all"
+                        className="flex items-center space-x-4 px-6 py-4 w-full text-left text-white/40 hover:text-red-400 hover:bg-red-400/5 rounded-2xl transition-all cursor-pointer"
                     >
                         <span>🚪</span>
                         <span className="font-bold">Logout</span>
@@ -72,8 +74,8 @@ const DashboardLayout = () => {
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
             
             <div className="lg:ml-72 flex flex-col min-h-screen">
-                <header className="sticky top-0 z-40 bg-white/50 backdrop-blur-xl border-b border-gray-100 px-6 lg:px-12 py-6 flex items-center justify-between">
-                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 text-gsps-blue bg-white rounded-xl shadow-sm">☰</button>
+                <header className="sticky top-0 z-40 bg-white/50 backdrop-blur-xl border-b border-gray-100 px-6 lg:px-6 py-3 flex items-center justify-between">
+                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden px-4 py-2 text-gsps-blue bg-white rounded-[10px] shadow-sm">☰</button>
                     
                     <div className="flex items-center space-x-4 ml-auto">
                         <div className="text-right hidden sm:block">
@@ -86,9 +88,10 @@ const DashboardLayout = () => {
                     </div>
                 </header>
 
-                <main className="flex-1 p-6 lg:p-12 overflow-x-hidden">
+                <main className="flex-1 p-6 lg:p-6 overflow-x-hidden">
                     <Outlet />
                 </main>
+                <ChatFloatingButton />
             </div>
         </div>
     );

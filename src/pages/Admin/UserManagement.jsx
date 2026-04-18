@@ -33,6 +33,8 @@ const UserManagement = () => {
                             <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Full Name</th>
                             <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Email</th>
                             <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">KYC Status</th>
+                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Tier</th>
+                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Referrals</th>
                             <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Wallet</th>
                             <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Joined</th>
                         </tr>
@@ -47,6 +49,13 @@ const UserManagement = () => {
                                         u.kycStatus === 'approved' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
                                     }`}>{u.kycStatus}</span>
                                 </td>
+                                <td className="px-8 py-6">
+                                    <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
+                                        u.tier === 'Diamond' ? 'bg-purple-100 text-purple-600' : 
+                                        u.tier === 'Gold' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600'
+                                    }`}>{u.tier || 'Silver'}</span>
+                                </td>
+                                <td className="px-8 py-6 font-black text-gsps-blue">{u.referralCount || 0}</td>
                                 <td className="px-8 py-6 font-black text-gsps-blue">${u.walletBalance.toFixed(2)}</td>
                                 <td className="px-8 py-6 font-bold text-sm text-gsps-blue/40">{new Date(u.createdAt).toLocaleDateString()}</td>
                             </tr>

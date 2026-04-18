@@ -23,6 +23,10 @@ const KYCManagement = () => {
     }, []);
 
     const handleUpdateStatus = async (id, status) => {
+        if (status === 'rejected' && !rejectionReason.trim()) {
+            alert('Please provide a rejection reason.');
+            return;
+        }
         try {
             await api.put(`/admin/kyc/${id}`, { status, rejectionReason });
             setSelectedKYC(null);
@@ -36,37 +40,40 @@ const KYCManagement = () => {
     return (
         <div className="space-y-12">
             <header>
-                <h1 className="text-4xl font-black text-gsps-blue mb-2">KYC <span className="text-gsps-green">Verification</span></h1>
+                <h1 className="text-3xl font-black text-gsps-blue mb-2">KYC <span className="text-gsps-green">Verification</span></h1>
                 <p className="text-gsps-blue/40 font-bold uppercase tracking-widest text-sm">Review Student Identites</p>
             </header>
 
-            <div className="bg-white rounded-[40px] shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-[10px] shadow-sm border border-gray-100 overflow-y-auto">
                 <table className="w-full text-left">
                     <thead className="bg-gsps-bg-light border-b border-gray-100">
                         <tr>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Student</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Document</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Submitted</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Status</th>
-                            <th className="px-8 py-6 text-xs font-black text-gsps-blue/40 uppercase tracking-widest text-right">Action</th>
+                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Student</th>
+                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Document</th>
+                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Submitted</th>
+                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest">Status</th>
+                            <th className="px-8 py-3 text-xs font-black text-gsps-blue/40 uppercase tracking-widest text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                         {kycs.map((kyc) => (
                             <tr key={kyc._id} className="hover:bg-gsps-bg-light/30 transition-all">
-                                <td className="px-8 py-6">
+                                <td className="px-8 py-3">
                                     <p className="font-black text-gsps-blue">{kyc.user?.fullName}</p>
                                     <p className="text-xs font-bold text-gsps-blue/40 italic">{kyc.user?.email}</p>
                                 </td>
-                                <td className="px-8 py-6 font-bold text-sm text-gsps-blue/60">{kyc.idType} ({kyc.idNumber})</td>
-                                <td className="px-8 py-6 font-bold text-sm text-gsps-blue/40">{new Date(kyc.createdAt).toLocaleDateString()}</td>
-                                <td className="px-8 py-6">
+                                <td className="px-8 py-3 font-bold text-sm text-gsps-blue/60">
+                                    {kyc.studentName} <br/>
+                                    <span className="text-xs text-gsps-blue/40">{kyc.whatsappNumber}</span>
+                                </td>
+                                <td className="px-8 py-3 font-bold text-sm text-gsps-blue/40">{new Date(kyc.createdAt).toLocaleDateString()}</td>
+                                <td className="px-8 py-3">
                                     <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
                                         kyc.status === 'approved' ? 'bg-green-100 text-green-600' : 
                                         kyc.status === 'pending' ? 'bg-orange-100 text-orange-600' : 'bg-red-100 text-red-600'
                                     }`}>{kyc.status}</span>
                                 </td>
-                                <td className="px-8 py-6 text-right">
+                                <td className="px-8 py-3 text-right">
                                     <button 
                                         onClick={() => setSelectedKYC(kyc)}
                                         className="text-gsps-green font-black hover:underline text-sm uppercase tracking-widest"
@@ -84,8 +91,8 @@ const KYCManagement = () => {
             {selectedKYC && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-gsps-blue/80 backdrop-blur-md" onClick={() => setSelectedKYC(null)}></div>
-                    <div className="relative bg-white w-full max-w-4xl rounded-[50px] shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-                        <div className="p-8 md:p-12 space-y-10">
+                    <div className="relative bg-white w-full max-w-4xl rounded-[10px] shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+                        <div className="p-4  space-y-10">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-3xl font-black text-gsps-blue">KYC Review</h2>
                                 <button onClick={() => setSelectedKYC(null)} className="text-2xl opacity-20 hover:opacity-100">✕</button>
@@ -96,24 +103,34 @@ const KYCManagement = () => {
                                     <p className="text-xs font-black text-gsps-blue/30 uppercase tracking-widest">Student Information</p>
                                     <div className="space-y-4">
                                         <p className="text-lg font-black text-gsps-blue">{selectedKYC.user?.fullName}</p>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div><p className="text-[10px] opacity-40 uppercase font-black">ID Type</p><p className="font-bold">{selectedKYC.idType}</p></div>
-                                            <div><p className="text-[10px] opacity-40 uppercase font-black">ID Number</p><p className="font-bold">{selectedKYC.idNumber}</p></div>
+                                        <p className="text-xs font-bold text-gsps-blue/40 italic">{selectedKYC.user?.email}</p>
+                                        <div className="grid grid-cols-2 gap-4 mt-4">
+                                            <div><p className="text-[10px] opacity-40 uppercase font-black">Student Name</p><p className="font-bold">{selectedKYC.studentName}</p></div>
+                                            <div><p className="text-[10px] opacity-40 uppercase font-black">WhatsApp</p><p className="font-bold">{selectedKYC.whatsappNumber}</p></div>
                                         </div>
-                                        <div><p className="text-[10px] opacity-40 uppercase font-black">University</p><p className="font-bold">{selectedKYC.universityName}</p></div>
-                                        <div><p className="text-[10px] opacity-40 uppercase font-black">Location</p><p className="font-bold">{selectedKYC.address?.street}, {selectedKYC.address?.city}, {selectedKYC.address?.country}</p></div>
                                     </div>
                                 </section>
 
                                 <section className="space-y-6">
                                     <p className="text-xs font-black text-gsps-blue/30 uppercase tracking-widest">Document Previews</p>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {Object.entries(selectedKYC.documents).map(([key, val]) => val && (
-                                            <a key={key} href={`http://localhost:5000/${val}`} target="_blank" rel="noreferrer" className="block p-4 bg-gsps-bg-light rounded-2xl hover:bg-gsps-green/5 transition-all text-center">
-                                                <span className="text-2xl block mb-2">📄</span>
-                                                <span className="text-[10px] font-black uppercase text-gsps-blue/40">{key}</span>
-                                            </a>
-                                        ))}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        {Object.entries(selectedKYC.documents).map(([key, val]) => {
+                                            if (!val) return null;
+                                            const isImage = val.match(/\.(jpeg|jpg|gif|png)$/i);
+                                            const formatKey = key.replace(/([A-Z])/g, ' $1').trim();
+                                            return (
+                                                <a key={key} href={`http://localhost:5000/${val}`} target="_blank" rel="noreferrer" className="block p-4 bg-gsps-bg-light rounded-2xl hover:bg-gsps-green/5 transition-all text-center group">
+                                                    {isImage ? (
+                                                        <div className="h-24 w-full mb-3 rounded-lg overflow-hidden border border-gray-200">
+                                                            <img src={`http://localhost:5000/${val}`} alt={key} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-3xl block mb-2 opacity-50">📄</span>
+                                                    )}
+                                                    <span className="text-[10px] font-black uppercase text-gsps-blue/40">{formatKey}</span>
+                                                </a>
+                                            );
+                                        })}
                                     </div>
                                 </section>
                             </div>
@@ -128,16 +145,16 @@ const KYCManagement = () => {
                                         className="w-full px-6 py-4 rounded-2xl bg-gsps-bg-light outline-none font-bold text-gsps-blue"
                                     ></textarea>
                                 </div>
-                                <div className="flex space-x-4">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                     <button 
                                         onClick={() => handleUpdateStatus(selectedKYC._id, 'approved')}
-                                        className="flex-1 bg-gsps-green text-white py-5 rounded-3xl font-black text-lg shadow-xl shadow-green-500/10 hover:scale-[1.02] transition-all"
+                                        className="flex-1 bg-gsps-green text-white py-5 rounded-[10px] font-black text-lg shadow-xl shadow-green-500/10 hover:scale-[1.02] transition-all"
                                     >
                                         Approve & Verify
                                     </button>
                                     <button 
                                         onClick={() => handleUpdateStatus(selectedKYC._id, 'rejected')}
-                                        className="flex-1 bg-red-500 text-white py-5 rounded-3xl font-black text-lg shadow-xl shadow-red-500/10 hover:scale-[1.02] transition-all"
+                                        className="flex-1 bg-red-500 text-white py-5 rounded-[10px] font-black text-lg shadow-xl shadow-red-500/10 hover:scale-[1.02] transition-all"
                                     >
                                         Reject Application
                                     </button>

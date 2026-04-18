@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
+import { useAuth } from '../../../context/AuthContext';
 
 const Payments = () => {
+    const { user } = useAuth();
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -101,6 +103,13 @@ const Payments = () => {
                             <div className="col-span-2 space-y-2">
                                 <label className="text-xs font-black text-gsps-blue/40 uppercase tracking-widest ml-1">Amount</label>
                                 <input type="number" name="amount" value={formData.amount} placeholder="0.00" onChange={handleChange} required className="w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue shadow-inner" />
+                                {formData.amount && (
+                                    <div className="flex items-center space-x-2 ml-1">
+                                        <span className="text-[10px] font-black text-gsps-green bg-gsps-green/10 px-2 py-1 rounded-md uppercase tracking-tighter">
+                                            Tier Savings: {user?.tier === 'Diamond' ? '8%' : user?.tier === 'Gold' ? '5%' : '3%'} (-${(formData.amount * (user?.tier === 'Diamond' ? 0.08 : user?.tier === 'Gold' ? 0.05 : 0.03)).toFixed(2)})
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

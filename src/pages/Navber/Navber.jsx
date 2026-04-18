@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navber = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    setDropdownOpen(false);
+    navigate('/login');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,12 +72,39 @@ const Navber = () => {
            
             
 
-             <Link
-                 to="/login"
+             {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center justify-center w-12 h-12 rounded-full bg-gsps-green/10 text-gsps-green font-black text-lg border-2 border-transparent hover:border-gsps-green/30 transition-all focus:outline-none focus:ring-2 focus:ring-gsps-green/50"
+                  aria-expanded={dropdownOpen}
+                >
+                  {user.fullName?.charAt(0) || "U"}
+                </button>
+                
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 z-50">
+                    <div className="px-5 py-2 border-b border-gray-100 mb-2">
+                        <p className="font-bold text-gsps-blue truncate">{user.fullName}</p>
+                        <p className="text-xs text-gsps-blue/60 truncate">{user.email}</p>
+                    </div>
+                    <div className="flex flex-col space-y-1 px-3">
+                      <Link to="/dashboard" className="px-4 py-2 text-sm font-bold text-gsps-blue hover:bg-gsps-bg-light hover:text-gsps-green rounded-xl transition-all" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
+                      <Link to="/dashboard" className="px-4 py-2 text-sm font-bold text-gsps-blue hover:bg-gsps-bg-light hover:text-gsps-green rounded-xl transition-all" onClick={() => setDropdownOpen(false)}>Profile</Link>
+                      <Link to="/dashboard/kyc" className="px-4 py-2 text-sm font-bold text-gsps-blue hover:bg-gsps-bg-light hover:text-gsps-green rounded-xl transition-all" onClick={() => setDropdownOpen(false)}>KYC Verification</Link>
+                      <button onClick={handleLogout} className="text-left px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-all">Logout</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
                 className="bg-gsps-blue text-white px-8 py-3 rounded-[8px] font-black hover:bg-opacity-90 transition-all shadow-xl shadow-gsps-blue/20 active:scale-95"
               >
                 Login
               </Link>
+            )}
             
             {/* <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-100">
              
@@ -118,18 +155,43 @@ const Navber = () => {
             </Link>
           ))}
           <div className="h-px bg-gray-100 my-4"></div>
-          <Link
-            to="/login"
-            className="text-gsps-blue font-bold text-xl p-4 rounded-2xl active:bg-gsps-bg-light"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="w-full text-center bg-gsps-blue text-white px-8 py-5 rounded-3xl font-black text-xl shadow-2xl shadow-gsps-blue/20 active:scale-95 mt-4"
-          >
-            Create Free Account
-          </Link>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="text-gsps-blue font-bold text-xl p-4 rounded-2xl active:bg-gsps-bg-light"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/dashboard/kyc"
+                className="text-gsps-blue font-bold text-xl p-4 rounded-2xl active:bg-gsps-bg-light"
+              >
+                KYC Verification
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-left w-full text-red-500 font-bold text-xl p-4 rounded-2xl active:bg-red-50 mt-2"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="text-gsps-blue font-bold text-xl p-4 rounded-2xl active:bg-gsps-bg-light"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="w-full text-center bg-gsps-blue text-white px-8 py-5 rounded-3xl font-black text-xl shadow-2xl shadow-gsps-blue/20 active:scale-95 mt-4"
+              >
+                Create Free Account
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

@@ -23,6 +23,7 @@ import KYCManagement from "../pages/Admin/KYCManagement.jsx";
 import PaymentManagement from "../pages/Admin/PaymentManagement.jsx";
 import UserManagement from "../pages/Admin/UserManagement.jsx";
 import Analytics from "../pages/Admin/Analytics.jsx";
+import LiveChat from "../pages/Admin/LiveChat.jsx";
 
 // Protection
 import { ProtectedRoute, KYCProtectedRoute, AdminRoute } from "../components/Protection/ProtectedRoute.jsx";
@@ -101,6 +102,7 @@ const router = createBrowserRouter([
       { path: "payments", element: <PaymentManagement /> },
       { path: "users", element: <UserManagement /> },
       { path: "analytics", element: <Analytics /> },
+      { path: "chat", element: <LiveChat /> },
     ]
   }
 ]);

@@ -5,12 +5,17 @@ import { useAuth } from "../../context/AuthContext";
 const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
+
+  const query = new URLSearchParams(window.location.search);
+const refCode = query.get("ref");
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
-    password: "",
-    confirmPassword: "",
+    password: "123456",
+    confirmPassword: "123456",
+    referredBy: refCode || null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -26,6 +31,9 @@ const Signup = () => {
     }
     setLoading(true);
     setError("");
+
+    
+
     try {
       await signup(formData);
       navigate("/dashboard");
