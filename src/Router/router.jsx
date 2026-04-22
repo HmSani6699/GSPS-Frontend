@@ -10,6 +10,7 @@ import Support from "../pages/Support/Support.jsx";
 import Calculator from "../pages/Calculator/Calculator.jsx";
 import Login from "../pages/Auth/Login.jsx";
 import Signup from "../pages/Auth/Signup.jsx";
+import OTPVerification from "../pages/Auth/OTPVerification.jsx";
 
 // Dashboard Pages
 import Overview from "../pages/Dashboard/Overview/Overview.jsx";
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
+  { path: "/verify-otp", element: <OTPVerification /> },
   
   // Student Dashboard
   {

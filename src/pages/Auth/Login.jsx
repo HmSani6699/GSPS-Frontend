@@ -28,6 +28,9 @@ const Login = () => {
           navigate('/dashboard');
       }
     } catch (err) {
+      if (err.response?.data?.unverified) {
+        return navigate("/verify-otp", { state: { email: formData.email } });
+      }
       setError(err.response?.data?.message || "Invalid email or password");
     } finally {
       setLoading(false);

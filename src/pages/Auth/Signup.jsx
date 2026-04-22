@@ -35,8 +35,8 @@ const refCode = query.get("ref");
     
 
     try {
-      await signup(formData);
-      navigate("/dashboard");
+      const res = await signup(formData);
+      navigate("/verify-otp", { state: { email: formData.email } });
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {

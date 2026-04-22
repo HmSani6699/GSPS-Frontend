@@ -36,6 +36,11 @@ export const AuthProvider = ({ children }) => {
 
     const signup = async (userData) => {
         const res = await api.post('/auth/signup', userData);
+        return res.data;
+    };
+
+    const verifyOTP = async (email, otp) => {
+        const res = await api.post('/auth/verify-otp', { email, otp });
         localStorage.setItem('token', res.data.token);
         setUser(res.data.user);
         return res.data;
@@ -51,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         signup,
+        verifyOTP,
         logout,
         checkAuth
     };
