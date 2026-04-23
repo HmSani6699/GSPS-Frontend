@@ -18,6 +18,7 @@ import KYCForm from "../pages/Dashboard/KYC/KYCForm.jsx";
 import Payments from "../pages/Dashboard/Payments/Payments.jsx";
 import Referrals from "../pages/Dashboard/Referrals/Referrals.jsx";
 import Wallet from "../pages/Dashboard/Wallet/Wallet.jsx";
+import Service from "../pages/Dashboard/Service/Service.jsx";
 
 // Admin Pages
 import KYCManagement from "../pages/Admin/KYCManagement.jsx";
@@ -25,6 +26,7 @@ import PaymentManagement from "../pages/Admin/PaymentManagement.jsx";
 import UserManagement from "../pages/Admin/UserManagement.jsx";
 import Analytics from "../pages/Admin/Analytics.jsx";
 import LiveChat from "../pages/Admin/LiveChat.jsx";
+import FeeApplicationManagement from "../pages/Admin/FeeApplicationManagement.jsx";
 
 // Protection
 import { ProtectedRoute, KYCProtectedRoute, AdminRoute } from "../components/Protection/ProtectedRoute.jsx";
@@ -87,6 +89,14 @@ const router = createBrowserRouter([
           </KYCProtectedRoute>
         )
       },
+      {
+        path: "service",
+        element: (
+          <KYCProtectedRoute>
+            <Service />
+          </KYCProtectedRoute>
+        )
+      },
     ]
   },
 
@@ -105,6 +115,7 @@ const router = createBrowserRouter([
       { path: "users", element: <UserManagement /> },
       { path: "analytics", element: <Analytics /> },
       { path: "chat", element: <LiveChat /> },
+      { path: "service", element: <FeeApplicationManagement /> },
     ]
   }
 ]);

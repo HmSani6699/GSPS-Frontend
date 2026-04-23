@@ -11,6 +11,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const menuItems = [
         { name: 'Overview', path: '/dashboard', icon: '📊' },
         { name: 'KYC Status', path: '/dashboard/kyc', icon: '🪪' },
+        { name: 'Service', path: '/dashboard/service', icon: '🛠️' },
         { name: 'Payments', path: '/dashboard/payments', icon: '💸' },
         { name: 'Referrals', path: '/dashboard/referrals', icon: '👥' },
         { name: 'Wallet', path: '/dashboard/wallet', icon: '💰' },
@@ -20,6 +21,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: 'KYC Management', path: '/admin/kyc', icon: '🔍' },
         { name: 'Payments list', path: '/admin/payments', icon: '💳' },
         { name: 'User Management', path: '/admin/users', icon: '👥' },
+        { name: 'Fee Applications', path: '/admin/service', icon: '📑' },
         { name: 'Analytics', path: '/admin/analytics', icon: '📈' },
         { name: 'Live Chat', path: '/admin/chat', icon: '💬' },
     ];
@@ -36,7 +38,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     <button onClick={toggleSidebar} className="lg:hidden text-white/60 hover:text-white">✕</button>
                 </div>
 
-                <nav className="flex-1 px-6 py-4 space-y-2 overflow-y-auto">
+                <nav className="flex-1 px-6 py-4 space-y-2 overflow-y-auto custom-scrollbar">
                     {actualItems.map((item) => (
                         <Link
                             key={item.name}

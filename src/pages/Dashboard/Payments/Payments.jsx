@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 const Payments = () => {
     const { user } = useAuth();
+    const location = useLocation();
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -15,6 +17,18 @@ const Payments = () => {
         currency: 'GBP',
         purpose: ''
     });
+
+    useEffect(() => {
+        if (location.state) {
+            const { amount, type, appId } = location.state;
+            setFormData(prev => ({
+                ...prev,
+                amount: amount || '',
+                paymentType: 'Other',
+                purpose: `Payment for ${type} (App ID: ${appId})`
+            }));
+        }
+    }, [location]);
     const [invoice, setInvoice] = useState(null);
 
     const fetchPayments = async () => {
@@ -80,7 +94,13 @@ const Payments = () => {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
                             <label className="text-xs font-black text-gsps-blue/40 uppercase tracking-widest ml-1">Payment Type</label>
-                            <select name="paymentType" value={formData.paymentType} onChange={handleChange} className="w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue">
+                            <select 
+                                name="paymentType" 
+                                value={formData.paymentType} 
+                                onChange={handleChange} 
+                                disabled={!!location.state}
+                                className={`w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue ${location.state ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            >
                                 <option>Tuition Fee</option>
                                 <option>Application Fee</option>
                                 <option>Visa Fee</option>
@@ -102,7 +122,16 @@ const Payments = () => {
                             </div>
                             <div className="col-span-2 space-y-2">
                                 <label className="text-xs font-black text-gsps-blue/40 uppercase tracking-widest ml-1">Amount</label>
-                                <input type="number" name="amount" value={formData.amount} placeholder="0.00" onChange={handleChange} required className="w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue shadow-inner" />
+                                <input 
+                                    type="number" 
+                                    name="amount" 
+                                    value={formData.amount} 
+                                    placeholder="0.00" 
+                                    onChange={handleChange} 
+                                    required 
+                                    disabled={!!location.state?.amount}
+                                    className={`w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue shadow-inner ${location.state?.amount ? 'opacity-60 cursor-not-allowed' : ''}`} 
+                                />
                                 {formData.amount && (
                                     <div className="flex items-center space-x-2 ml-1">
                                         <span className="text-[10px] font-black text-gsps-green bg-gsps-green/10 px-2 py-1 rounded-md uppercase tracking-tighter">
@@ -115,7 +144,15 @@ const Payments = () => {
 
                         <div className="space-y-2">
                             <label className="text-xs font-black text-gsps-blue/40 uppercase tracking-widest ml-1">Purpose / Note</label>
-                            <textarea name="purpose" value={formData.purpose} placeholder="e.g. 2nd Semester Fees for Student ID 123456" onChange={handleChange} rows="3" className="w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue shadow-inner"></textarea>
+                            <textarea 
+                                name="purpose" 
+                                value={formData.purpose} 
+                                placeholder="e.g. 2nd Semester Fees for Student ID 123456" 
+                                onChange={handleChange} 
+                                rows="3" 
+                                disabled={!!location.state}
+                                className={`w-full px-6 py-4 rounded-2xl bg-gsps-bg-light border-2 border-transparent focus:border-gsps-green/30 outline-none font-bold text-gsps-blue shadow-inner ${location.state ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            ></textarea>
                         </div>
 
                         <div className="space-y-2">
